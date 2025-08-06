@@ -14,7 +14,6 @@ contract Marketplace {
     IToken public token;
     uint256 public nextListingId;
     mapping(uint256 => Listing) public listings;
-    IToken public immutable token;
 
     // Allowance mapping to let sellers pre-approve Marketplace
     mapping(address => mapping(address => uint256)) public allowance;
