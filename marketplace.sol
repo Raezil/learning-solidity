@@ -4,19 +4,20 @@ pragma solidity ^0.8.0;
 import "./contract.sol";
 
 contract Marketplace {
+
+    struct Listing {
+        address seller;
+        uint256 price;
+        bool active;
+    }
+
+    IToken public token;
+    uint256 public nextListingId;
+    mapping(uint256 => Listing) public listings;
     IToken public immutable token;
 
     // Allowance mapping to let sellers pre-approve Marketplace
     mapping(address => mapping(address => uint256)) public allowance;
-
-    struct Listing {
-        address seller;
-        uint256 price;   // in tokens
-        bool    active;
-    }
-
-    mapping(uint256 => Listing) public listings;
-    uint256 public nextListingId;
 
     event Listed(uint256 indexed listingId, address indexed seller, uint256 price);
     event Bought(uint256 indexed listingId, address indexed buyer, uint256 price);
@@ -58,4 +59,10 @@ contract Marketplace {
         item.active = false;
         emit Bought(listingId, msg.sender, item.price);
     }
+    /// @notice Return listing details
+    function getListing(uint256 listingId) external view returns (address seller, uint256 price, bool active) {
+        Listing memory item = listings[listingId];
+        return (item.seller, item.price, item.active);
+    }
 }
+
