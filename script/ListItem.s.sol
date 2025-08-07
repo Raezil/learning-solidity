@@ -10,7 +10,7 @@ contract ListItemScript is Script {
         uint256 sellerKey = vm.envUint("PRIVATE_KEY");
         address interactorAddr = vm.envAddress("INTERACTOR_ADDRESS");
         uint256 approveAmount = vm.envUint("APPROVE_AMOUNT");
-        uint256 price = vm.envUint("PRICE");
+        uint256 price = 0.5 ether;
 
         vm.startBroadcast(sellerKey);
         Interactor interactor = Interactor(interactorAddr);
