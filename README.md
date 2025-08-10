@@ -1,66 +1,52 @@
-## Foundry
+# market-dapp (Go + go-ethereum)
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+A tiny, runnable CLI dApp that deploys and uses a Token + Marketplace + Interactor using your abigen bindings.
 
-Foundry consists of:
+## Prereqs
+- Go 1.22+
+- A JSON-RPC node (e.g., Anvil): `anvil --chain-id 31337`
+- Export a funded private key from the node
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
-
-## Documentation
-
-https://book.getfoundry.sh/
-
-## Usage
-
-### Build
-
-```shell
-$ forge build
+## Setup
+```bash
+cd market-dapp
+go mod tidy
 ```
 
-### Test
-
-```shell
-$ forge test
+## Env
+```bash
+export RPC_URL=http://127.0.0.1:8545
+export PRIVATE_KEY=<hex-no-0x>
+export CHAIN_ID=31337
 ```
 
-### Format
-
-```shell
-$ forge fmt
+## Deploy
+```bash
+go run . deploy-token
+# copy token address
+go run . deploy-marketplace --token <TOKEN_ADDR>
+# copy marketplace address
+go run . deploy-interactor --marketplace <MARKETPLACE_ADDR>
 ```
 
-### Gas Snapshots
+## Use
+```bash
+# Who am I
+go run . whoami
 
-```shell
-$ forge snapshot
+# Approve token spending for marketplace (via Interactor or directly)
+go run . approve --interactor <INTERACTOR_ADDR> --amount 1000000000000000000
+
+# List an item (price is an integer according to your Token's unit semantics)
+go run . list --interactor <INTERACTOR_ADDR> --price 250000000000000000
+
+# Buy (send ETH only if your Marketplace requires it)
+go run . buy --interactor <INTERACTOR_ADDR> --id 0 --value 0
+
+# Inspect profile and listing
+go run . profile --interactor <INTERACTOR_ADDR>
+go run . listing --interactor <INTERACTOR_ADDR> --id 0
 ```
 
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+> Adjust amounts to your token economics. The CLI uses `bind.NewKeyedTransactorWithChainID`
+> with dynamic fees suggested by the node.
