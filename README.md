@@ -1,5 +1,6 @@
-# market-dapp (Go + go-ethereum)
-
+<p align="center">
+  <img width="1024" height="1024" alt="logo" src="https://github.com/user-attachments/assets/39fd81db-691e-4ef4-baf6-13caf0981f82" />
+</p>
 A tiny, runnable CLI dApp that deploys and uses a Token + Marketplace + Interactor using your abigen bindings.
 
 ## Prereqs
