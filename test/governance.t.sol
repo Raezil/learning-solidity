@@ -140,7 +140,8 @@ contract MarketplaceGovernedTest is Test {
         vm.deal(buyer, 10 ether);
         uint256 t0Treasury = treasury.balance;
         uint256 t0Seller   = seller.balance;
-        uint256 fee = (5 ether * 1) / 10_000;
+        uint256 feeBps = mkt.feeBps();
+        uint256 fee = (5 ether * feeBps) / 10_000;
         uint256 payout = 5 ether - fee;
 
         // Expect event
